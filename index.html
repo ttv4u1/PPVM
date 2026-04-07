@@ -1,12 +1,11 @@
-<!-- PPVM Landing Page v3.0 (Master Edition) -->
+<!-- PPVM Landing Page v3.4 (Unmuted Audio & Autoplay) -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPVM v3.0 | High Speed Engineering</title>
+    <title>PPVM v3.4 | Unmuted Cinematic Experience</title>
     
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -33,16 +32,29 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; font-size: 0.85rem; }
-        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; transition: 0.5s; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; transition: 0.5s; cursor: pointer; }
 
-        /* --- STAGE 1: INTRO VIDEO (UNMUTED) --- */
+        /* --- STAGE 1: UNMUTED INTRO STAGE --- */
         #intro-stage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; background: #000; display: flex; justify-content: center; align-items: center; cursor: pointer;
+            z-index: 9999; background: #000; display: flex; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
         }
         #intro-video { width: 100%; height: 100%; object-fit: cover; }
-        .intro-hint { position: absolute; bottom: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        
+        /* Audio Unmute Overlay (Shows only if browser blocks sound) */
+        #audio-overlay {
+            position: absolute; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10000;
+        }
+        .unmute-btn {
+            background: var(--accent); color: #000; padding: 15px 40px;
+            border-radius: 50px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 2px; border: none; cursor: pointer;
+            box-shadow: 0 0 30px var(--accent); animation: glow 1.5s infinite;
+        }
+        @keyframes glow { 0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--accent); } 50% { transform: scale(1.05); box-shadow: 0 0 40px var(--accent); } }
 
         /* --- SPEED LINES CANVAS --- */
         #speed-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.6; }
@@ -74,7 +86,7 @@
             50% { opacity: 0.8; filter: drop-shadow(0 0 5px var(--lightning-color)); }
         }
 
-        /* --- NAV LINKS & DROPDOWN --- */
+        /* --- DROPDOWN NEW COURSE --- */
         .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .nav-links a:hover { color: var(--accent); }
@@ -92,8 +104,8 @@
 
         /* --- HERO & COMPONENTS --- */
         .glass-btn {
-            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); 
-            padding: 8px 18px; border-radius: 8px; color: var(--text-main); font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 8px 18px;
+            border-radius: 8px; color: var(--text-main); font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
         .glass-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.2); }
 
@@ -101,13 +113,12 @@
         .pixar-icon { font-size: 4rem; margin-bottom: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); animation: float 5s infinite ease-in-out; }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
         
-        h1.reveal-title { font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 15px; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; transition: transform 0.1s ease-out; }
+        h1.reveal-title { font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 15px; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 40px 10%; }
         .card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 15px; backdrop-filter: blur(10px); cursor: pointer; transition: 0.4s; }
         .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255,255,255,0.08); }
 
-        /* Modal */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
         .modal-content { background: var(--bg-body); border: 1px solid var(--glass-border); padding: 40px; border-radius: 20px; max-width: 450px; width: 100%; text-align: center; }
 
@@ -116,17 +127,20 @@
         @media (max-width: 768px) { .nav-links { display: none; } h1.reveal-title { font-size: 2.5rem; } }
     </style>
 </head>
-<body>
+<body onclick="handleFirstClick()">
 
-    <!-- STAGE 1: INTRO (UNMUTED VIA CLICK) -->
-    <div id="intro-stage" onclick="forcePlay()">
-        <video id="intro-video" autoplay playsinline>
+    <!-- STAGE 1: INTRO (UNMUTED) -->
+    <div id="intro-stage">
+        <video id="intro-video" playsinline>
             <source src="https://github.com/ttv4u1/PPVM/raw/main/PPVM.webm" type="video/mp4">
         </video>
-        <div class="intro-hint" id="sound-hint"><i class="fas fa-volume-up"></i> TAP FOR SOUND & EXPERIENCE</div>
+        <div id="audio-overlay">
+            <button class="unmute-btn" id="unmute-btn">Start Experience <i class="fas fa-play"></i></button>
+            <p style="color: #666; margin-top: 15px; font-size: 0.7rem; letter-spacing: 2px;">SOUND RECOMMENDED</p>
+        </div>
     </div>
 
-    <!-- STAGE 2: MAIN CONTENT -->
+    <!-- STAGE 2: MAIN PAGE -->
     <div id="main-landing">
         <canvas id="speed-canvas"></canvas>
         <video autoplay muted loop playsinline class="bg-video-loop">
@@ -186,7 +200,7 @@
         </div>
 
         <footer>
-            <p id="footer-text">&copy; 2024 PPVM Studio. All Rights Reserved. v3.0</p>
+            <p id="footer-text">&copy; 2024 PPVM Studio. All Rights Reserved. v3.4</p>
         </footer>
     </div>
 
@@ -200,56 +214,59 @@
     </div>
 
     <script>
-        // --- 1. COURSE DATA (MAX 20) ---
         const courses = [
             { id: 1, en: "3D Engine Modeling", ms: "Model Enjin 3D" },
             { id: 2, en: "Pixar-Style Lighting", ms: "Pencahayaan Gaya Pixar" },
             { id: 3, en: "Automotive Texturing", ms: "Tekstur Automotif" },
             { id: 4, en: "Unreal Engine Racing", ms: "Perlumbaan Unreal Engine" },
-            { id: 5, en: "Cinematic Rendering", ms: "Renderan Sinematik" },
-            // Boleh tambah sehingga 20
+            { id: 5, en: "Cinematic Rendering", ms: "Renderan Sinematik" }
         ];
-
-        // --- 2. TRANSLATION DATA (ALL FONTS) ---
-        const uiText = {
-            en: {
-                navAbout: "About", navMembers: "Members", navContact: "Contact", navCourse: "New Course",
-                heroTitle: "High Speed Precision", heroDesc: "Experience the next level of automotive engineering with PPVM cinematic 3D speed visuals.",
-                cardAboutT: "About Studio", cardAboutD: "Learn about our vision in Pixar-style 3D rendering.",
-                cardDetT: "Technical Details", cardDetD: "Explore the mechanics behind our professional models.",
-                cardMemT: "Member List", cardMemD: "Our expert team behind the latest innovations.",
-                cardCourseT: "New Course", cardCourseD: "Enroll in our latest 3D Engineering Masterclass 2024.",
-                footerText: "© 2024 PPVM Studio. All Rights Reserved. v3.0", btnClose: "Close",
-                about: { t: "About PPVM", b: "PPVM specializes in high-speed 3D automotive visualization and cinematic rendering for modern industries." },
-                details: { t: "Technical Details", b: "Real-time PBR shaders, 4K textures, and optimized LOD assets for high-performance simulation." },
-                members: { t: "Team Members", b: "Core Team: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
-                course: { t: "Courses", b: "Use the navigation dropdown to see our list of 20 premium courses." },
-                contact: { t: "Contact", b: "Email: info@ppvm.com <br> Support is available 24/7." }
-            },
-            ms: {
-                navAbout: "Tentang", navMembers: "Ahli", navContact: "Hubungi", navCourse: "Kursus Baru",
-                heroTitle: "Ketepatan Berkelajuan Tinggi", heroDesc: "Alami tahap kejuruteraan automotif seterusnya dengan visual kelajuan 3D sinematik PPVM.",
-                cardAboutT: "Tentang Studio", cardAboutD: "Ketahui visi kami dalam renderan 3D gaya Pixar.",
-                cardDetT: "Perincian Teknikal", cardDetD: "Terokai mekanik di sebalik model profesional kami.",
-                cardMemT: "Senarai Ahli", cardMemD: "Pasukan pakar kami di sebalik inovasi terkini.",
-                cardCourseT: "Kursus Baru", cardCourseD: "Sertai Masterclass Kejuruteraan 3D terbaru kami 2024.",
-                footerText: "© 2024 Studio PPVM. Hak Cipta Terpelihara. v3.0", btnClose: "Tutup",
-                about: { t: "Tentang PPVM", b: "PPVM pakar dalam visualisasi automotif 3D berkelajuan tinggi dan renderan sinematik untuk industri moden." },
-                details: { t: "Perincian Teknikal", b: "Shader PBR masa nyata, tekstur 4K, dan aset LOD yang dioptimumkan untuk simulasi prestasi tinggi." },
-                members: { t: "Ahli Kumpulan", b: "Pasukan Teras: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
-                course: { t: "Kursus", b: "Gunakan menu dropdown di atas untuk melihat senarai 20 kursus premium kami." },
-                contact: { t: "Hubungi", b: "Emel: info@ppvm.com <br> Bantuan tersedia 24/7." }
-            }
-        };
 
         const introVideo = document.getElementById('intro-video');
         const introStage = document.getElementById('intro-stage');
+        const audioOverlay = document.getElementById('audio-overlay');
         const mainLanding = document.getElementById('main-landing');
         const canvas = document.getElementById('speed-canvas');
         const ctx = canvas.getContext('2d');
         let currentLang = 'en';
+        let interactionInitiated = false;
 
-        // --- 3. DYNAMIC COURSE RENDER ---
+        // --- 1. UNMUTED AUTOPLAY SYSTEM ---
+        // Mencuba autoplay dengan suara. Jika gagal (polisi browser), papar overlay.
+        window.onload = function() {
+            introVideo.muted = false; // Matikan mute secara default
+            let playPromise = introVideo.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Berjaya autoplay dengan suara
+                    audioOverlay.style.display = 'none';
+                }).catch(error => {
+                    // Autoplay disekat oleh browser
+                    audioOverlay.style.display = 'flex';
+                });
+            }
+        };
+
+        function handleFirstClick() {
+            if (!interactionInitiated) {
+                introVideo.play();
+                audioOverlay.style.display = 'none';
+                interactionInitiated = true;
+            }
+        }
+
+        introVideo.onended = () => {
+            introStage.style.opacity = '0';
+            setTimeout(() => {
+                introStage.style.display = 'none';
+                mainLanding.style.display = 'block';
+                initSpeedLines(); drawLines(); renderCourses(currentLang);
+                setTimeout(() => { mainLanding.style.opacity = '1'; }, 50);
+            }, 1000);
+        };
+
+        // --- 2. COURSE RENDER ---
         function renderCourses(lang) {
             const list = document.getElementById('course-dropdown-list');
             list.innerHTML = '';
@@ -262,10 +279,10 @@
             });
         }
 
-        // --- 4. SPEED LINES ANIMATION ---
+        // --- 3. SPEED LINES ---
         let lines = [];
         const colors = ['#00d2ff', '#3a7bd5', '#9d50bb', '#ff0080'];
-        function initLines() {
+        function initSpeedLines() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             lines = [];
             for (let i = 0; i < 80; i++) {
@@ -282,23 +299,38 @@
             requestAnimationFrame(drawLines);
         }
 
-        // --- 5. INTRO & TRANSITION ---
-        function forcePlay() { 
-            introVideo.play(); 
-            document.getElementById('sound-hint').style.display = 'none'; 
-        }
-        
-        introVideo.onended = () => {
-            introStage.style.opacity = '0';
-            setTimeout(() => {
-                introStage.style.display = 'none';
-                mainLanding.style.display = 'block';
-                initLines(); drawLines(); renderCourses(currentLang);
-                setTimeout(() => { mainLanding.style.opacity = '1'; }, 50);
-            }, 1000);
+        // --- 4. UI FUNCTIONS ---
+        const uiText = {
+            en: {
+                navAbout: "About", navMembers: "Members", navContact: "Contact", navCourse: "New Course",
+                heroTitle: "High Speed Precision", heroDesc: "Experience the next level of automotive engineering with PPVM cinematic 3D speed visuals.",
+                cardAboutT: "About Studio", cardAboutD: "Learn about our vision in Pixar-style 3D rendering.",
+                cardDetT: "Technical Details", cardDetD: "Explore the mechanics behind our professional models.",
+                cardMemT: "Member List", cardMemD: "Our expert team behind the latest innovations.",
+                cardCourseT: "New Course", cardCourseD: "Enroll in our latest 3D Engineering Masterclass 2024.",
+                footerText: "© 2024 PPVM Studio. All Rights Reserved. v3.4", btnClose: "Close",
+                about: { t: "About PPVM", b: "PPVM specializes in high-speed 3D automotive visualization." },
+                details: { t: "Technical Details", b: "PBR shaders and 4K textures simulation assets." },
+                members: { t: "Members", b: "Pasukan PPVM: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
+                course: { t: "Courses", b: "Select from the 20 courses available in the dropdown." },
+                contact: { t: "Contact", b: "Email: info@ppvm.com" }
+            },
+            ms: {
+                navAbout: "Tentang", navMembers: "Ahli", navContact: "Hubungi", navCourse: "Kursus Baru",
+                heroTitle: "Ketepatan Berkelajuan Tinggi", heroDesc: "Alami tahap kejuruteraan automotif seterusnya dengan visual kelajuan 3D sinematik PPVM.",
+                cardAboutT: "Tentang Studio", cardAboutD: "Ketahui visi kami dalam renderan 3D gaya Pixar.",
+                cardDetT: "Perincian Teknikal", cardDetD: "Terokai mekanik di sebalik model profesional kami.",
+                cardMemT: "Senarai Ahli", cardMemD: "Pasukan pakar kami di sebalik inovasi terkini.",
+                cardCourseT: "Kursus Baru", cardCourseD: "Sertai Masterclass Kejuruteraan 3D terbaru kami 2024.",
+                footerText: "© 2024 Studio PPVM. Hak Cipta Terpelihara. v3.4", btnClose: "Tutup",
+                about: { t: "Tentang PPVM", b: "PPVM pakar dalam visualisasi automotif 3D berkelajuan tinggi." },
+                details: { t: "Perincian Teknikal", b: "Shader PBR dan aset simulasi tekstur 4K." },
+                members: { t: "Ahli Kami", b: "Pasukan PPVM: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
+                course: { t: "Kursus", b: "Pilih dari 20 kursus premium dalam dropdown." },
+                contact: { t: "Hubungi", b: "Hubungi kami di info@ppvm.com" }
+            }
         };
 
-        // --- 6. CORE FUNCTIONS (LANG, THEME, MODAL) ---
         function toggleLang() {
             currentLang = currentLang === 'en' ? 'ms' : 'en';
             const lang = uiText[currentLang];
@@ -336,18 +368,3 @@
             html.setAttribute('data-theme', isDark ? 'light' : 'dark');
             document.getElementById('theme-icon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
         }
-
-        // Parallax Mouse Effect
-        document.addEventListener('mousemove', (e) => {
-            const title = document.querySelector('.reveal-title');
-            if(title) {
-                const x = (window.innerWidth / 2 - e.pageX) / 50;
-                const y = (window.innerHeight / 2 - e.pageY) / 50;
-                title.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
-            }
-        });
-
-        window.addEventListener('resize', initLines);
-    </script>
-</body>
-</html>
