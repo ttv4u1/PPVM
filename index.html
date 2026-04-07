@@ -1,0 +1,353 @@
+<!-- PPVM Landing Page v3.0 (Master Edition) -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPVM v3.0 | High Speed Engineering</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #080808;
+            --text-main: #ffffff;
+            --text-sub: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #00d2ff;
+            --lightning-color: #00d2ff;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f5f5f7;
+            --text-main: #1d1d1f;
+            --text-sub: #6e6e73;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --accent: #007aff;
+            --lightning-color: #007aff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; font-size: 0.85rem; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; transition: 0.5s; }
+
+        /* --- STAGE 1: INTRO VIDEO (UNMUTED) --- */
+        #intro-stage {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9999; background: #000; display: flex; justify-content: center; align-items: center; cursor: pointer;
+        }
+        #intro-video { width: 100%; height: 100%; object-fit: cover; }
+        .intro-hint { position: absolute; bottom: 40px; color: #fff; font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+
+        /* --- SPEED LINES CANVAS --- */
+        #speed-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.6; }
+
+        /* --- MAIN LANDING --- */
+        #main-landing { display: none; opacity: 0; transition: 1.5s ease; }
+        .bg-video-loop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; object-fit: cover; filter: brightness(0.3); opacity: 0.5; }
+
+        /* --- NAVIGATION & LIGHTNING LOGO --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 12px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+        }
+
+        .logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; color: var(--text-main); }
+        .car-logo { width: 35px; height: auto; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+        .logo-text span { font-weight: 300; color: var(--accent); }
+
+        .logo-container:hover .car-logo {
+            transform: scale(1.1) rotate(-5deg);
+            filter: drop-shadow(0 0 10px var(--lightning-color)) drop-shadow(0 0 20px var(--lightning-color));
+            animation: lightning-flicker 0.15s infinite;
+        }
+        @keyframes lightning-flicker {
+            0%, 100% { opacity: 1; filter: drop-shadow(0 0 15px var(--lightning-color)); }
+            50% { opacity: 0.8; filter: drop-shadow(0 0 5px var(--lightning-color)); }
+        }
+
+        /* --- NAV LINKS & DROPDOWN --- */
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            position: absolute; top: 100%; left: 0; background: var(--glass-bg); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 12px; min-width: 220px; 
+            opacity: 0; visibility: hidden; transform: translateY(10px); transition: 0.3s;
+            padding: 10px 0; z-index: 1001; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { padding: 10px 20px; font-size: 0.75rem; color: var(--text-main); text-decoration: none; display: block; transition: 0.2s; border-left: 3px solid transparent; }
+        .dropdown-item:hover { background: rgba(255,255,255,0.1); border-left-color: var(--accent); color: var(--accent); }
+
+        /* --- HERO & COMPONENTS --- */
+        .glass-btn {
+            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); 
+            padding: 8px 18px; border-radius: 8px; color: var(--text-main); font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .glass-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.2); }
+
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 10%; }
+        .pixar-icon { font-size: 4rem; margin-bottom: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); animation: float 5s infinite ease-in-out; }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+        
+        h1.reveal-title { font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 15px; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; transition: transform 0.1s ease-out; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 40px 10%; }
+        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 15px; backdrop-filter: blur(10px); cursor: pointer; transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255,255,255,0.08); }
+
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--bg-body); border: 1px solid var(--glass-border); padding: 40px; border-radius: 20px; max-width: 450px; width: 100%; text-align: center; }
+
+        footer { padding: 30px; text-align: center; font-size: 0.7rem; border-top: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); }
+
+        @media (max-width: 768px) { .nav-links { display: none; } h1.reveal-title { font-size: 2.5rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- STAGE 1: INTRO (UNMUTED VIA CLICK) -->
+    <div id="intro-stage" onclick="forcePlay()">
+        <video id="intro-video" autoplay playsinline>
+            <source src="https://github.com/ttv4u1/PPVM/raw/main/PPVM.webm" type="video/mp4">
+        </video>
+        <div class="intro-hint" id="sound-hint"><i class="fas fa-volume-up"></i> TAP FOR SOUND & EXPERIENCE</div>
+    </div>
+
+    <!-- STAGE 2: MAIN CONTENT -->
+    <div id="main-landing">
+        <canvas id="speed-canvas"></canvas>
+        <video autoplay muted loop playsinline class="bg-video-loop">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-mechanical-parts-working-together-41122-large.mp4" type="video/mp4">
+        </video>
+
+        <nav>
+            <a href="#" class="logo-container">
+                <img src="https://github.com/ttv4u1/PPVM/raw/main/logo.svg" class="car-logo" alt="PPVM Logo"> 
+                <div class="logo-text">PP<span>VM</span></div>
+            </a>
+
+            <div class="nav-links">
+                <a onclick="showModal('about')" id="nav-about">About</a>
+                <a onclick="showModal('members')" id="nav-members">Members</a>
+                <a onclick="showModal('contact')" id="nav-contact">Contact</a>
+                
+                <div class="dropdown">
+                    <a id="nav-course">New Course <i class="fas fa-chevron-down" style="font-size: 0.6rem; margin-left: 3px;"></i></a>
+                    <div class="dropdown-content" id="course-dropdown-list"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="glass-btn" onclick="toggleLang()" id="btn-lang">MS</button>
+                <button class="glass-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="theme-icon"></i></button>
+            </div>
+        </nav>
+
+        <header class="hero">
+            <div class="pixar-icon">⚡</div>
+            <h1 class="reveal-title" id="hero-title">High Speed Precision</h1>
+            <p id="hero-desc" style="color: var(--text-sub); max-width: 500px;">Experience the next level of automotive engineering with PPVM cinematic 3D speed visuals.</p>
+        </header>
+
+        <div class="grid">
+            <div class="card" onclick="showModal('about')">
+                <div class="pixar-icon" style="font-size: 2rem;">🏎️</div>
+                <h3 id="card-about-t">About Studio</h3>
+                <p id="card-about-d">Learn about our vision in Pixar-style 3D rendering.</p>
+            </div>
+            <div class="card" onclick="showModal('details')">
+                <div class="pixar-icon" style="font-size: 2rem;">🛠️</div>
+                <h3 id="card-det-t">Technical Details</h3>
+                <p id="card-det-d">Explore the mechanics behind our professional models.</p>
+            </div>
+            <div class="card" onclick="showModal('members')">
+                <div class="pixar-icon" style="font-size: 2rem;">👥</div>
+                <h3 id="card-mem-t">Member List</h3>
+                <p id="card-mem-d">Our expert team behind the latest innovations.</p>
+            </div>
+            <div class="card" onclick="showModal('course')">
+                <div class="pixar-icon" style="font-size: 2rem;">🎓</div>
+                <h3 id="card-course-t">New Course</h3>
+                <p id="card-course-d">Enroll in our latest 3D Engineering Masterclass 2024.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p id="footer-text">&copy; 2024 PPVM Studio. All Rights Reserved. v3.0</p>
+        </footer>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <h2 id="modal-title">Title</h2>
+            <div id="modal-body" style="margin: 20px 0; color: var(--text-sub); line-height: 1.6;">Details...</div>
+            <button class="glass-btn" onclick="closeModal()" id="btn-close">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. COURSE DATA (MAX 20) ---
+        const courses = [
+            { id: 1, en: "3D Engine Modeling", ms: "Model Enjin 3D" },
+            { id: 2, en: "Pixar-Style Lighting", ms: "Pencahayaan Gaya Pixar" },
+            { id: 3, en: "Automotive Texturing", ms: "Tekstur Automotif" },
+            { id: 4, en: "Unreal Engine Racing", ms: "Perlumbaan Unreal Engine" },
+            { id: 5, en: "Cinematic Rendering", ms: "Renderan Sinematik" },
+            // Boleh tambah sehingga 20
+        ];
+
+        // --- 2. TRANSLATION DATA (ALL FONTS) ---
+        const uiText = {
+            en: {
+                navAbout: "About", navMembers: "Members", navContact: "Contact", navCourse: "New Course",
+                heroTitle: "High Speed Precision", heroDesc: "Experience the next level of automotive engineering with PPVM cinematic 3D speed visuals.",
+                cardAboutT: "About Studio", cardAboutD: "Learn about our vision in Pixar-style 3D rendering.",
+                cardDetT: "Technical Details", cardDetD: "Explore the mechanics behind our professional models.",
+                cardMemT: "Member List", cardMemD: "Our expert team behind the latest innovations.",
+                cardCourseT: "New Course", cardCourseD: "Enroll in our latest 3D Engineering Masterclass 2024.",
+                footerText: "© 2024 PPVM Studio. All Rights Reserved. v3.0", btnClose: "Close",
+                about: { t: "About PPVM", b: "PPVM specializes in high-speed 3D automotive visualization and cinematic rendering for modern industries." },
+                details: { t: "Technical Details", b: "Real-time PBR shaders, 4K textures, and optimized LOD assets for high-performance simulation." },
+                members: { t: "Team Members", b: "Core Team: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
+                course: { t: "Courses", b: "Use the navigation dropdown to see our list of 20 premium courses." },
+                contact: { t: "Contact", b: "Email: info@ppvm.com <br> Support is available 24/7." }
+            },
+            ms: {
+                navAbout: "Tentang", navMembers: "Ahli", navContact: "Hubungi", navCourse: "Kursus Baru",
+                heroTitle: "Ketepatan Berkelajuan Tinggi", heroDesc: "Alami tahap kejuruteraan automotif seterusnya dengan visual kelajuan 3D sinematik PPVM.",
+                cardAboutT: "Tentang Studio", cardAboutD: "Ketahui visi kami dalam renderan 3D gaya Pixar.",
+                cardDetT: "Perincian Teknikal", cardDetD: "Terokai mekanik di sebalik model profesional kami.",
+                cardMemT: "Senarai Ahli", cardMemD: "Pasukan pakar kami di sebalik inovasi terkini.",
+                cardCourseT: "Kursus Baru", cardCourseD: "Sertai Masterclass Kejuruteraan 3D terbaru kami 2024.",
+                footerText: "© 2024 Studio PPVM. Hak Cipta Terpelihara. v3.0", btnClose: "Tutup",
+                about: { t: "Tentang PPVM", b: "PPVM pakar dalam visualisasi automotif 3D berkelajuan tinggi dan renderan sinematik untuk industri moden." },
+                details: { t: "Perincian Teknikal", b: "Shader PBR masa nyata, tekstur 4K, dan aset LOD yang dioptimumkan untuk simulasi prestasi tinggi." },
+                members: { t: "Ahli Kumpulan", b: "Pasukan Teras: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
+                course: { t: "Kursus", b: "Gunakan menu dropdown di atas untuk melihat senarai 20 kursus premium kami." },
+                contact: { t: "Hubungi", b: "Emel: info@ppvm.com <br> Bantuan tersedia 24/7." }
+            }
+        };
+
+        const introVideo = document.getElementById('intro-video');
+        const introStage = document.getElementById('intro-stage');
+        const mainLanding = document.getElementById('main-landing');
+        const canvas = document.getElementById('speed-canvas');
+        const ctx = canvas.getContext('2d');
+        let currentLang = 'en';
+
+        // --- 3. DYNAMIC COURSE RENDER ---
+        function renderCourses(lang) {
+            const list = document.getElementById('course-dropdown-list');
+            list.innerHTML = '';
+            courses.slice(0, 20).forEach(course => {
+                const a = document.createElement('a');
+                a.className = 'dropdown-item';
+                a.innerText = lang === 'en' ? course.en : course.ms;
+                a.onclick = () => showModal('course');
+                list.appendChild(a);
+            });
+        }
+
+        // --- 4. SPEED LINES ANIMATION ---
+        let lines = [];
+        const colors = ['#00d2ff', '#3a7bd5', '#9d50bb', '#ff0080'];
+        function initLines() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            lines = [];
+            for (let i = 0; i < 80; i++) {
+                lines.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, length: Math.random() * 100 + 20, speed: Math.random() * 20 + 10, color: colors[Math.floor(Math.random() * colors.length)] });
+            }
+        }
+        function drawLines() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            lines.forEach(line => {
+                ctx.beginPath(); ctx.strokeStyle = line.color; ctx.lineWidth = 2; ctx.lineCap = 'round';
+                ctx.moveTo(line.x, line.y); ctx.lineTo(line.x + line.length, line.y); ctx.stroke();
+                line.x += line.speed; if (line.x > canvas.width) { line.x = -line.length; line.y = Math.random() * canvas.height; }
+            });
+            requestAnimationFrame(drawLines);
+        }
+
+        // --- 5. INTRO & TRANSITION ---
+        function forcePlay() { 
+            introVideo.play(); 
+            document.getElementById('sound-hint').style.display = 'none'; 
+        }
+        
+        introVideo.onended = () => {
+            introStage.style.opacity = '0';
+            setTimeout(() => {
+                introStage.style.display = 'none';
+                mainLanding.style.display = 'block';
+                initLines(); drawLines(); renderCourses(currentLang);
+                setTimeout(() => { mainLanding.style.opacity = '1'; }, 50);
+            }, 1000);
+        };
+
+        // --- 6. CORE FUNCTIONS (LANG, THEME, MODAL) ---
+        function toggleLang() {
+            currentLang = currentLang === 'en' ? 'ms' : 'en';
+            const lang = uiText[currentLang];
+            document.getElementById('nav-about').innerText = lang.navAbout;
+            document.getElementById('nav-members').innerText = lang.navMembers;
+            document.getElementById('nav-contact').innerText = lang.navContact;
+            document.getElementById('nav-course').innerHTML = lang.navCourse + ' <i class="fas fa-chevron-down" style="font-size: 0.6rem; margin-left: 3px;"></i>';
+            document.getElementById('hero-title').innerText = lang.heroTitle;
+            document.getElementById('hero-desc').innerText = lang.heroDesc;
+            document.getElementById('card-about-t').innerText = lang.cardAboutT;
+            document.getElementById('card-about-d').innerText = lang.cardAboutD;
+            document.getElementById('card-det-t').innerText = lang.cardDetT;
+            document.getElementById('card-det-d').innerText = lang.cardDetD;
+            document.getElementById('card-mem-t').innerText = lang.cardMemT;
+            document.getElementById('card-mem-d').innerText = lang.cardMemD;
+            document.getElementById('card-course-t').innerText = lang.cardCourseT;
+            document.getElementById('card-course-d').innerText = lang.cardCourseD;
+            document.getElementById('footer-text').innerText = lang.footerText;
+            document.getElementById('btn-close').innerText = lang.btnClose;
+            document.getElementById('btn-lang').innerText = currentLang.toUpperCase();
+            renderCourses(currentLang);
+        }
+
+        function showModal(key) {
+            const data = uiText[currentLang][key];
+            document.getElementById('modal-title').innerText = data.t;
+            document.getElementById('modal-body').innerHTML = data.b;
+            document.getElementById('infoModal').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('infoModal').style.display = 'none'; }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('theme-icon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Parallax Mouse Effect
+        document.addEventListener('mousemove', (e) => {
+            const title = document.querySelector('.reveal-title');
+            if(title) {
+                const x = (window.innerWidth / 2 - e.pageX) / 50;
+                const y = (window.innerHeight / 2 - e.pageY) / 50;
+                title.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+            }
+        });
+
+        window.addEventListener('resize', initLines);
+    </script>
+</body>
+</html>
