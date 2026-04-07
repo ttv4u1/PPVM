@@ -1,10 +1,10 @@
-<!-- PPVM Landing Page v3.4 (Unmuted Audio & Autoplay) -->
+<!-- PPVM Landing Page v4.2 (Final Intro Edition) -->
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PPVM v3.4 | Unmuted Cinematic Experience</title>
+    <title>PPVM v4.2 | Iconic 3D Engineering</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,120 +32,114 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         html { scroll-behavior: smooth; font-size: 0.85rem; }
-        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; transition: 0.5s; cursor: pointer; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; transition: 0.5s; }
 
-        /* --- STAGE 1: UNMUTED INTRO STAGE --- */
-        #intro-stage {
+        /* --- REVEAL ANIMATION SYSTEM --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-1 { transition-delay: 0.2s; }
+        .delay-2 { transition-delay: 0.4s; }
+
+        /* --- VIDEO BACKGROUND --- */
+        .video-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; background: #000; display: flex; justify-content: center; align-items: center;
-            transition: opacity 1s ease;
+            z-index: -2; background: #000; overflow: hidden;
         }
-        #intro-video { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Audio Unmute Overlay (Shows only if browser blocks sound) */
-        #audio-overlay {
-            position: absolute; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: none; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 10000;
+        #bg-video {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: brightness(0.6); opacity: 1; transition: 2s ease;
         }
-        .unmute-btn {
-            background: var(--accent); color: #000; padding: 15px 40px;
-            border-radius: 50px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 2px; border: none; cursor: pointer;
-            box-shadow: 0 0 30px var(--accent); animation: glow 1.5s infinite;
-        }
-        @keyframes glow { 0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--accent); } 50% { transform: scale(1.05); box-shadow: 0 0 40px var(--accent); } }
 
-        /* --- SPEED LINES CANVAS --- */
-        #speed-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.6; }
+        /* --- SPEED LINES --- */
+        #speed-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.4; }
 
-        /* --- MAIN LANDING --- */
-        #main-landing { display: none; opacity: 0; transition: 1.5s ease; }
-        .bg-video-loop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; object-fit: cover; filter: brightness(0.3); opacity: 0.5; }
-
-        /* --- NAVIGATION & LIGHTNING LOGO --- */
+        /* --- NAVIGATION --- */
         nav {
             position: fixed; top: 0; width: 100%; padding: 12px 5%;
             display: flex; justify-content: space-between; align-items: center;
             z-index: 1000; backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
             background: var(--glass-bg);
         }
-
         .logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; color: var(--text-main); }
-        .car-logo { width: 35px; height: auto; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .car-logo { width: 35px; height: auto; transition: opacity 1.5s ease, transform 0.3s ease; }
         .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
         .logo-text span { font-weight: 300; color: var(--accent); }
 
         .logo-container:hover .car-logo {
             transform: scale(1.1) rotate(-5deg);
-            filter: drop-shadow(0 0 10px var(--lightning-color)) drop-shadow(0 0 20px var(--lightning-color));
-            animation: lightning-flicker 0.15s infinite;
+            filter: drop-shadow(0 0 15px var(--lightning-color));
+            animation: lightning-flicker 0.1s infinite;
         }
-        @keyframes lightning-flicker {
-            0%, 100% { opacity: 1; filter: drop-shadow(0 0 15px var(--lightning-color)); }
-            50% { opacity: 0.8; filter: drop-shadow(0 0 5px var(--lightning-color)); }
+        @keyframes lightning-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        /* --- PIXAR STYLE ICONS --- */
+        .icon-3d {
+            display: inline-block;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+            transform: translateY(5px);
+            margin: 0 10px;
+            animation: floating 3s ease-in-out infinite;
         }
+        @keyframes floating { 0%, 100% { transform: translateY(5px); } 50% { transform: translateY(-5px); } }
 
-        /* --- DROPDOWN NEW COURSE --- */
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-
+        /* --- DROPDOWN --- */
         .dropdown { position: relative; display: inline-block; }
         .dropdown-content {
             position: absolute; top: 100%; left: 0; background: var(--glass-bg); backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); border-radius: 12px; min-width: 220px; 
+            border: 1px solid var(--glass-border); border-radius: 12px; min-width: 250px; 
+            max-height: 400px; overflow-y: auto;
             opacity: 0; visibility: hidden; transform: translateY(10px); transition: 0.3s;
             padding: 10px 0; z-index: 1001; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-item { padding: 10px 20px; font-size: 0.75rem; color: var(--text-main); text-decoration: none; display: block; transition: 0.2s; border-left: 3px solid transparent; }
+        .dropdown-item { padding: 10px 20px; font-size: 0.7rem; color: var(--text-main); text-decoration: none; display: block; transition: 0.2s; border-left: 3px solid transparent; }
         .dropdown-item:hover { background: rgba(255,255,255,0.1); border-left-color: var(--accent); color: var(--accent); }
 
-        /* --- HERO & COMPONENTS --- */
-        .glass-btn {
-            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 8px 18px;
-            border-radius: 8px; color: var(--text-main); font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
-        }
-        .glass-btn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.2); }
-
+        /* --- HERO --- */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 10%; }
-        .pixar-icon { font-size: 4rem; margin-bottom: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); animation: float 5s infinite ease-in-out; }
-        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
-        
-        h1.reveal-title { font-size: 4rem; font-weight: 800; line-height: 1; letter-spacing: -2px; margin-bottom: 15px; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1.reveal-title { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 15px; perspective: 1000px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; padding: 40px 10%; }
-        .card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 15px; backdrop-filter: blur(10px); cursor: pointer; transition: 0.4s; }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .glass-btn {
+            background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 10px 25px;
+            border-radius: 12px; color: var(--text-main); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+        }
+        .glass-btn:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,210,255,0.3); }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-        .modal-content { background: var(--bg-body); border: 1px solid var(--glass-border); padding: 40px; border-radius: 20px; max-width: 450px; width: 100%; text-align: center; }
+        /* --- GRID CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; padding: 60px 10%; }
+        .card { 
+            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: 20px; 
+            backdrop-filter: blur(15px); cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .card:hover { transform: translateY(-15px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .card h3 { margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        footer { padding: 30px; text-align: center; font-size: 0.7rem; border-top: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-sub); }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--bg-body); border: 1px solid var(--glass-border); padding: 40px; border-radius: 25px; max-width: 500px; width: 100%; text-align: center; }
 
-        @media (max-width: 768px) { .nav-links { display: none; } h1.reveal-title { font-size: 2.5rem; } }
+        footer { padding: 40px; text-align: center; font-size: 0.75rem; border-top: 1px solid var(--glass-border); background: var(--glass-bg); }
+
+        @media (max-width: 768px) { .nav-links { display: none; } }
     </style>
 </head>
-<body onclick="handleFirstClick()">
+<body>
 
-    <!-- STAGE 1: INTRO (UNMUTED) -->
-    <div id="intro-stage">
-        <video id="intro-video" playsinline>
+    <!-- VIDEO BACKGROUND (Play Once) -->
+    <div class="video-container">
+        <video id="bg-video" autoplay playsinline muted>
             <source src="https://github.com/ttv4u1/PPVM/raw/main/PPVM.webm" type="video/mp4">
         </video>
-        <div id="audio-overlay">
-            <button class="unmute-btn" id="unmute-btn">Start Experience <i class="fas fa-play"></i></button>
-            <p style="color: #666; margin-top: 15px; font-size: 0.7rem; letter-spacing: 2px;">SOUND RECOMMENDED</p>
-        </div>
     </div>
 
-    <!-- STAGE 2: MAIN PAGE -->
     <div id="main-landing">
         <canvas id="speed-canvas"></canvas>
-        <video autoplay muted loop playsinline class="bg-video-loop">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-mechanical-parts-working-together-41122-large.mp4" type="video/mp4">
-        </video>
 
         <nav>
             <a href="#" class="logo-container">
@@ -153,13 +147,13 @@
                 <div class="logo-text">PP<span>VM</span></div>
             </a>
 
-            <div class="nav-links">
-                <a onclick="showModal('about')" id="nav-about">About</a>
-                <a onclick="showModal('members')" id="nav-members">Members</a>
-                <a onclick="showModal('contact')" id="nav-contact">Contact</a>
+            <div class="nav-links" style="display: flex; gap: 20px; align-items: center;">
+                <a onclick="showModal('about')" id="nav-about" style="color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer;">About</a>
+                <a onclick="showModal('members')" id="nav-members" style="color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Members</a>
+                <a onclick="showModal('contact')" id="nav-contact" style="color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer;">Contact</a>
                 
                 <div class="dropdown">
-                    <a id="nav-course">New Course <i class="fas fa-chevron-down" style="font-size: 0.6rem; margin-left: 3px;"></i></a>
+                    <a id="nav-course" style="color: var(--text-main); text-decoration: none; font-size: 0.75rem; font-weight: 600; cursor: pointer;">New Course <i class="fas fa-chevron-down" style="font-size: 0.6rem; margin-left: 3px;"></i></a>
                     <div class="dropdown-content" id="course-dropdown-list"></div>
                 </div>
             </div>
@@ -171,36 +165,34 @@
         </nav>
 
         <header class="hero">
-            <div class="pixar-icon">⚡</div>
-            <h1 class="reveal-title" id="hero-title">High Speed Precision</h1>
-            <p id="hero-desc" style="color: var(--text-sub); max-width: 500px;">Experience the next level of automotive engineering with PPVM cinematic 3D speed visuals.</p>
+            <div style="font-size: 5rem; margin-bottom: 20px;" class="icon-3d reveal">🏎️</div>
+            <h1 class="reveal-title reveal delay-1" id="hero-title">
+                <span class="icon-3d">⚡</span> High Speed Precision <span class="icon-3d">💎</span>
+            </h1>
+            <p id="hero-desc" class="reveal delay-2" style="color: var(--text-sub); max-width: 600px; font-weight: 400;">Experience the next level of automotive engineering with PPVM cinematic 3D visuals.</p>
         </header>
 
         <div class="grid">
-            <div class="card" onclick="showModal('about')">
-                <div class="pixar-icon" style="font-size: 2rem;">🏎️</div>
-                <h3 id="card-about-t">About Studio</h3>
+            <div class="card reveal" onclick="showModal('about')">
+                <h3 id="card-about-t"><span class="icon-3d">🏭</span> About Studio</h3>
                 <p id="card-about-d">Learn about our vision in Pixar-style 3D rendering.</p>
             </div>
-            <div class="card" onclick="showModal('details')">
-                <div class="pixar-icon" style="font-size: 2rem;">🛠️</div>
-                <h3 id="card-det-t">Technical Details</h3>
+            <div class="card reveal delay-1" onclick="showModal('details')">
+                <h3 id="card-det-t"><span class="icon-3d">⚙️</span> Technical Details</h3>
                 <p id="card-det-d">Explore the mechanics behind our professional models.</p>
             </div>
-            <div class="card" onclick="showModal('members')">
-                <div class="pixar-icon" style="font-size: 2rem;">👥</div>
-                <h3 id="card-mem-t">Member List</h3>
+            <div class="card reveal delay-2" onclick="showModal('members')">
+                <h3 id="card-mem-t"><span class="icon-3d">👥</span> Member List</h3>
                 <p id="card-mem-d">Our expert team behind the latest innovations.</p>
             </div>
-            <div class="card" onclick="showModal('course')">
-                <div class="pixar-icon" style="font-size: 2rem;">🎓</div>
-                <h3 id="card-course-t">New Course</h3>
-                <p id="card-course-d">Enroll in our latest 3D Engineering Masterclass 2024.</p>
+            <div class="card reveal" onclick="showModal('course')">
+                <h3 id="card-course-t"><span class="icon-3d">🎓</span> New Course</h3>
+                <p id="card-course-d">Enroll in our latest 3D Masterclass 2024.</p>
             </div>
         </div>
 
-        <footer>
-            <p id="footer-text">&copy; 2024 PPVM Studio. All Rights Reserved. v3.4</p>
+        <footer class="reveal">
+            <p id="footer-text">&copy; 2024 PPVM Studio. All Rights Reserved. v4.2</p>
         </footer>
     </div>
 
@@ -208,69 +200,89 @@
     <div class="modal" id="infoModal">
         <div class="modal-content">
             <h2 id="modal-title">Title</h2>
-            <div id="modal-body" style="margin: 20px 0; color: var(--text-sub); line-height: 1.6;">Details...</div>
+            <div id="modal-body" style="margin: 25px 0; color: var(--text-sub); line-height: 1.6;">Details...</div>
             <button class="glass-btn" onclick="closeModal()" id="btn-close">Close</button>
         </div>
     </div>
 
     <script>
-        const courses = [
-            { id: 1, en: "3D Engine Modeling", ms: "Model Enjin 3D" },
-            { id: 2, en: "Pixar-Style Lighting", ms: "Pencahayaan Gaya Pixar" },
-            { id: 3, en: "Automotive Texturing", ms: "Tekstur Automotif" },
-            { id: 4, en: "Unreal Engine Racing", ms: "Perlumbaan Unreal Engine" },
-            { id: 5, en: "Cinematic Rendering", ms: "Renderan Sinematik" }
-        ];
+        const courses = Array.from({length: 20}, (_, i) => ({
+            id: i + 1,
+            en: `Course ${i + 1}: ${["Engine", "PBR", "Lighting", "Physics", "Drafting"][i%5]} Masterclass`,
+            ms: `Kursus ${i + 1}: Masterclass ${["Enjin", "PBR", "Pencahayaan", "Fizik", "Pelan"][i%5]}`
+        }));
 
-        const introVideo = document.getElementById('intro-video');
-        const introStage = document.getElementById('intro-stage');
-        const audioOverlay = document.getElementById('audio-overlay');
-        const mainLanding = document.getElementById('main-landing');
+        const bgVideo = document.getElementById('bg-video');
         const canvas = document.getElementById('speed-canvas');
         const ctx = canvas.getContext('2d');
+        const logoImg = document.querySelector('.car-logo');
         let currentLang = 'en';
-        let interactionInitiated = false;
 
-        // --- 1. UNMUTED AUTOPLAY SYSTEM ---
-        // Mencuba autoplay dengan suara. Jika gagal (polisi browser), papar overlay.
-        window.onload = function() {
-            introVideo.muted = false; // Matikan mute secara default
-            let playPromise = introVideo.play();
-
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Berjaya autoplay dengan suara
-                    audioOverlay.style.display = 'none';
-                }).catch(error => {
-                    // Autoplay disekat oleh browser
-                    audioOverlay.style.display = 'flex';
-                });
-            }
-        };
-
-        function handleFirstClick() {
-            if (!interactionInitiated) {
-                introVideo.play();
-                audioOverlay.style.display = 'none';
-                interactionInitiated = true;
+        // --- 1. SMART AUTO-UNMUTE & END SCENE LOGIC ---
+        function enableSound() {
+            if (bgVideo.muted) {
+                bgVideo.muted = false;
+                window.removeEventListener('mousemove', enableSound);
+                window.removeEventListener('scroll', enableSound);
+                window.removeEventListener('touchstart', enableSound);
             }
         }
 
-        introVideo.onended = () => {
-            introStage.style.opacity = '0';
-            setTimeout(() => {
-                introStage.style.display = 'none';
-                mainLanding.style.display = 'block';
-                initSpeedLines(); drawLines(); renderCourses(currentLang);
-                setTimeout(() => { mainLanding.style.opacity = '1'; }, 50);
-            }, 1000);
+        window.addEventListener('mousemove', enableSound);
+        window.addEventListener('scroll', enableSound);
+        window.addEventListener('touchstart', enableSound);
+
+        // TRIGGER ON VIDEO END
+        bgVideo.onended = () => {
+            // Fade out video slightly
+            bgVideo.style.opacity = '0.5';
+            bgVideo.style.filter = 'brightness(0.3) blur(1px)';
+            // SET LOGO TO 60% OPACITY
+            if(logoImg) {
+                logoImg.style.opacity = '0.6';
+                console.log("Intro ended: Logo set to 60% opacity.");
+            }
         };
 
-        // --- 2. COURSE RENDER ---
+        // --- 2. REVEAL ANIMATION SYSTEM ---
+        function initReveal() {
+            const observerOptions = { threshold: 0.15 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // --- 3. SPEED LINES ---
+        let lines = [];
+        const colors = ['#00d2ff', '#3a7bd5', '#9d50bb', '#ff0080'];
+        function initLines() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            lines = [];
+            for (let i = 0; i < 60; i++) {
+                lines.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, length: Math.random() * 100 + 20, speed: Math.random() * 15 + 5, color: colors[Math.floor(Math.random() * colors.length)] });
+            }
+        }
+        function drawLines() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            lines.forEach(line => {
+                ctx.beginPath(); ctx.strokeStyle = line.color; ctx.lineWidth = 1.5; ctx.lineCap = 'round';
+                ctx.moveTo(line.x, line.y); ctx.lineTo(line.x + line.length, line.y); ctx.stroke();
+                line.x += line.speed; if (line.x > canvas.width) { line.x = -line.length; line.y = Math.random() * canvas.height; }
+            });
+            requestAnimationFrame(drawLines);
+        }
+
+        // --- 4. UI FUNCTIONS ---
         function renderCourses(lang) {
             const list = document.getElementById('course-dropdown-list');
             list.innerHTML = '';
-            courses.slice(0, 20).forEach(course => {
+            courses.forEach(course => {
                 const a = document.createElement('a');
                 a.className = 'dropdown-item';
                 a.innerText = lang === 'en' ? course.en : course.ms;
@@ -279,55 +291,36 @@
             });
         }
 
-        // --- 3. SPEED LINES ---
-        let lines = [];
-        const colors = ['#00d2ff', '#3a7bd5', '#9d50bb', '#ff0080'];
-        function initSpeedLines() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            lines = [];
-            for (let i = 0; i < 80; i++) {
-                lines.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, length: Math.random() * 100 + 20, speed: Math.random() * 20 + 10, color: colors[Math.floor(Math.random() * colors.length)] });
-            }
-        }
-        function drawLines() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            lines.forEach(line => {
-                ctx.beginPath(); ctx.strokeStyle = line.color; ctx.lineWidth = 2; ctx.lineCap = 'round';
-                ctx.moveTo(line.x, line.y); ctx.lineTo(line.x + line.length, line.y); ctx.stroke();
-                line.x += line.speed; if (line.x > canvas.width) { line.x = -line.length; line.y = Math.random() * canvas.height; }
-            });
-            requestAnimationFrame(drawLines);
-        }
-
-        // --- 4. UI FUNCTIONS ---
         const uiText = {
             en: {
                 navAbout: "About", navMembers: "Members", navContact: "Contact", navCourse: "New Course",
-                heroTitle: "High Speed Precision", heroDesc: "Experience the next level of automotive engineering with PPVM cinematic 3D speed visuals.",
-                cardAboutT: "About Studio", cardAboutD: "Learn about our vision in Pixar-style 3D rendering.",
-                cardDetT: "Technical Details", cardDetD: "Explore the mechanics behind our professional models.",
-                cardMemT: "Member List", cardMemD: "Our expert team behind the latest innovations.",
-                cardCourseT: "New Course", cardCourseD: "Enroll in our latest 3D Engineering Masterclass 2024.",
-                footerText: "© 2024 PPVM Studio. All Rights Reserved. v3.4", btnClose: "Close",
-                about: { t: "About PPVM", b: "PPVM specializes in high-speed 3D automotive visualization." },
-                details: { t: "Technical Details", b: "PBR shaders and 4K textures simulation assets." },
-                members: { t: "Members", b: "Pasukan PPVM: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
-                course: { t: "Courses", b: "Select from the 20 courses available in the dropdown." },
-                contact: { t: "Contact", b: "Email: info@ppvm.com" }
+                heroTitle: '<span class="icon-3d">⚡</span> High Speed Precision <span class="icon-3d">💎</span>', 
+                heroDesc: "Experience the next level of automotive engineering with PPVM cinematic 3D visuals.",
+                cardAboutT: '<span class="icon-3d">🏭</span> About Studio', cardAboutD: "Learn about our vision in Pixar-style 3D rendering.",
+                cardDetT: '<span class="icon-3d">⚙️</span> Technical Details', cardDetD: "Explore the mechanics behind our professional models.",
+                cardMemT: '<span class="icon-3d">👥</span> Member List', cardMemD: "Our expert team behind the latest innovations.",
+                cardCourseT: '<span class="icon-3d">🎓</span> New Course', cardCourseD: "Enroll in our latest 3D Masterclass 2024.",
+                footerText: "© 2024 PPVM Studio. All Rights Reserved. v4.2", btnClose: "Close",
+                about: { t: "About PPVM 🏎️", b: "Professional 3D automotive engineering studio focusing on high-speed rendering." },
+                details: { t: "Technical Details 🛠️", b: "Real-time PBR shaders, 4K textures, and optimized assets." },
+                members: { t: "Team Members 🧑‍🔧", b: "Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
+                course: { t: "Courses 🏁", b: "20 premium courses available in the dropdown." },
+                contact: { t: "Contact 📩", b: "Email: info@ppvm.com" }
             },
             ms: {
                 navAbout: "Tentang", navMembers: "Ahli", navContact: "Hubungi", navCourse: "Kursus Baru",
-                heroTitle: "Ketepatan Berkelajuan Tinggi", heroDesc: "Alami tahap kejuruteraan automotif seterusnya dengan visual kelajuan 3D sinematik PPVM.",
-                cardAboutT: "Tentang Studio", cardAboutD: "Ketahui visi kami dalam renderan 3D gaya Pixar.",
-                cardDetT: "Perincian Teknikal", cardDetD: "Terokai mekanik di sebalik model profesional kami.",
-                cardMemT: "Senarai Ahli", cardMemD: "Pasukan pakar kami di sebalik inovasi terkini.",
-                cardCourseT: "Kursus Baru", cardCourseD: "Sertai Masterclass Kejuruteraan 3D terbaru kami 2024.",
-                footerText: "© 2024 Studio PPVM. Hak Cipta Terpelihara. v3.4", btnClose: "Tutup",
-                about: { t: "Tentang PPVM", b: "PPVM pakar dalam visualisasi automotif 3D berkelajuan tinggi." },
-                details: { t: "Perincian Teknikal", b: "Shader PBR dan aset simulasi tekstur 4K." },
-                members: { t: "Ahli Kami", b: "Pasukan PPVM: Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
-                course: { t: "Kursus", b: "Pilih dari 20 kursus premium dalam dropdown." },
-                contact: { t: "Hubungi", b: "Hubungi kami di info@ppvm.com" }
+                heroTitle: '<span class="icon-3d">⚡</span> Ketepatan Kelajuan Tinggi <span class="icon-3d">💎</span>', 
+                heroDesc: "Alami tahap kejuruteraan automotif seterusnya dengan visual 3D sinematik PPVM.",
+                cardAboutT: '<span class="icon-3d">🏭</span> Tentang Studio', cardAboutD: "Ketahui visi kami dalam renderan 3D gaya Pixar.",
+                cardDetT: '<span class="icon-3d">⚙️</span> Perincian Teknikal', cardDetD: "Terokai mekanik di sebalik model profesional kami.",
+                cardMemT: '<span class="icon-3d">👥</span> Senarai Ahli', cardMemD: "Pasukan pakar kami di sebalik inovasi terkini.",
+                cardCourseT: '<span class="icon-3d">🎓</span> Kursus Baru', cardCourseD: "Sertai Masterclass 3D terbaru kami 2024.",
+                footerText: "© 2024 Studio PPVM. Hak Cipta Terpelihara. v4.2", btnClose: "Tutup",
+                about: { t: "Tentang PPVM 🏎️", b: "Studio kejuruteraan automotif 3D profesional memfokuskan renderan halaju tinggi." },
+                details: { t: "Perincian Teknikal 🛠️", b: "Shader PBR masa nyata, tekstur 4K, dan aset dioptimumkan." },
+                members: { t: "Ahli Kumpulan 🧑‍🔧", b: "Azmi, Black, Firdaus, Shahrill, Saiful, Nazri." },
+                course: { t: "Kursus 🏁", b: "20 kursus premium sedia ada dalam dropdown." },
+                contact: { t: "Hubungi 📩", b: "Hubungi kami di info@ppvm.com" }
             }
         };
 
@@ -338,15 +331,15 @@
             document.getElementById('nav-members').innerText = lang.navMembers;
             document.getElementById('nav-contact').innerText = lang.navContact;
             document.getElementById('nav-course').innerHTML = lang.navCourse + ' <i class="fas fa-chevron-down" style="font-size: 0.6rem; margin-left: 3px;"></i>';
-            document.getElementById('hero-title').innerText = lang.heroTitle;
+            document.getElementById('hero-title').innerHTML = lang.heroTitle;
             document.getElementById('hero-desc').innerText = lang.heroDesc;
-            document.getElementById('card-about-t').innerText = lang.cardAboutT;
+            document.getElementById('card-about-t').innerHTML = lang.cardAboutT;
             document.getElementById('card-about-d').innerText = lang.cardAboutD;
-            document.getElementById('card-det-t').innerText = lang.cardDetT;
+            document.getElementById('card-det-t').innerHTML = lang.cardDetT;
             document.getElementById('card-det-d').innerText = lang.cardDetD;
-            document.getElementById('card-mem-t').innerText = lang.cardMemT;
+            document.getElementById('card-mem-t').innerHTML = lang.cardMemT;
             document.getElementById('card-mem-d').innerText = lang.cardMemD;
-            document.getElementById('card-course-t').innerText = lang.cardCourseT;
+            document.getElementById('card-course-t').innerHTML = lang.cardCourseT;
             document.getElementById('card-course-d').innerText = lang.cardCourseD;
             document.getElementById('footer-text').innerText = lang.footerText;
             document.getElementById('btn-close').innerText = lang.btnClose;
@@ -356,7 +349,7 @@
 
         function showModal(key) {
             const data = uiText[currentLang][key];
-            document.getElementById('modal-title').innerText = data.t;
+            document.getElementById('modal-title').innerHTML = data.t;
             document.getElementById('modal-body').innerHTML = data.b;
             document.getElementById('infoModal').style.display = 'flex';
         }
@@ -368,3 +361,24 @@
             html.setAttribute('data-theme', isDark ? 'light' : 'dark');
             document.getElementById('theme-icon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
         }
+
+        // Mouse Move Title Effect
+        document.addEventListener('mousemove', (e) => {
+            const title = document.querySelector('.reveal-title');
+            if(title) {
+                const x = (window.innerWidth / 2 - e.pageX) / 70;
+                const y = (window.innerHeight / 2 - e.pageY) / 70;
+                title.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+            }
+        });
+
+        window.onload = () => { 
+            initLines(); 
+            drawLines(); 
+            renderCourses('en'); 
+            initReveal();
+        };
+        window.addEventListener('resize', initLines);
+    </script>
+</body>
+</html>
